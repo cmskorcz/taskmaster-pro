@@ -82,8 +82,46 @@ $(".list-group").on('blur', 'textarea', function() {
     .text(text);
 
   $(this).replaceWith(taskP);
+});
 
-})
+$('.list-group').on('click', 'span', function() {
+  let date = $(this)
+    .text()
+    .trim();
+
+  let dateInput = $('<input>')
+    .attr('type', 'text')
+    .addClass('form-control')
+    .val(date);
+
+  $(this).replaceWith(dateInput);
+
+  dateInput.trigger('focus');
+});
+
+$('.list-group').on('blur', 'input[type="text"]', function() {
+  let date = $(this)
+    .val()
+    .trim();
+
+  let status = $(this)
+    .closest('.list-group')
+    .attr('id')
+    .replace('list-', '');
+
+  let index = $(this)
+    .closest('.list-group-item')
+    .index();
+
+  tasks[status][index].date = date;
+  saveTasks();
+
+  let taskSpan = $('<span>')
+    .addClass('badge badge-primary badge-pill')
+    .text(date);
+
+  $(this).replaceWith(taskSpan);
+});
 
 // modal was triggered
 $("#task-form-modal").on("show.bs.modal", function() {
